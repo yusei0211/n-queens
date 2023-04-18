@@ -1,30 +1,32 @@
-class NQueenProblem:
-    def __init__(self, n):
-        self.n = n
-        self.board = [-1] * n
-        self.result = []
+p = [-1] * 2
+print(p)
+# class NQueenProblem:
+#     def __init__(self, n):
+#         self.n = n
+#         self.board = [-1] * n
+#         self.result = []
 
-    def is_valid(self, row, col):
-        for i in range(row):
-            if self.board[i] == col or abs(row - i) == abs(col - self.board[i]):
-                return False
-        return True
+#     def is_valid(self, row, col):
+#         for i in range(row):
+#             if self.board[i] == col or abs(row - i) == abs(col - self.board[i]):
+#                 return False
+#         return True
 
-    def solve(self, row=0):
-        if row == self.n:
-            self.result.append(self.board[:])
-        else:
-            for col in range(self.n):
-                if self.is_valid(row, col):
-                    self.board[row] = col
-                    self.solve(row + 1)
+#     def solve(self, row=0):
+#         if row == self.n:
+#             self.result.append(self.board[:])
+#         else:
+#             for col in range(self.n):
+#                 if self.is_valid(row, col):
+#                     self.board[row] = col
+#                     self.solve(row + 1)
 
 
-n = 8
-problem = NQueenProblem(n)
-problem.solve()
+# n = 8
+# problem = NQueenProblem(n)
+# problem.solve()
 
-print(len(problem.result))
+# print(len(problem.result))
 
 
 # def can_add(fwd, square):
