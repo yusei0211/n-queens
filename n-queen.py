@@ -1,5 +1,6 @@
 p = [-1] * 2
-print(p)
+positions = [[-1] * 8 for i in range(8)]
+print(positions)
 # class NQueenProblem:
 #     def __init__(self, n):
 #         self.n = n

@@ -42,4 +42,4 @@ def solve_queens(n):
 
 
 # 8クイーン問題を解く
-solve_queens(8)
+solve_queens(100)
