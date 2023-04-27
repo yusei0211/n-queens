@@ -22,13 +22,17 @@ solve_queenにn×nのnを渡す
 
 """
 
+
 def solve_queens(n):
     # 初期化：全てのクイーンは-1行にあると仮定する(リスト内包表記)
     positions = [[-1] * n for i in range(n)]
 
     for y in range(n):
         for x in range(n):
-            if n
+            if positions[x][y] == -1:
+                positions[x][y] == 1
+                break
+            
 
 
 # n-queen問題を解く
