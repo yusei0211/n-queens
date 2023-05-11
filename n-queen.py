@@ -1,71 +1,67 @@
-p = [-1] * 2
-positions = [[-1] * 8 for i in range(8)]
-print(positions)
-# class NQueenProblem:
-#     def __init__(self, n):
-#         self.n = n
-#         self.board = [-1] * n
-#         self.result = []
-
-#     def is_valid(self, row, col):
-#         for i in range(row):
-#             if self.board[i] == col or abs(row - i) == abs(col - self.board[i]):
-#                 return False
-#         return True
-
-#     def solve(self, row=0):
-#         if row == self.n:
-#             self.result.append(self.board[:])
-#         else:
-#             for col in range(self.n):
-#                 if self.is_valid(row, col):
-#                     self.board[row] = col
-#                     self.solve(row + 1)
+"""
+〜パラメータ〜
+n:ボードの一辺のマス
+x:横のマス
+y:縦のマス
+positions:n×nの二次元配列・-1はqueenが置けることを表す・０は他のクイーンの効き筋の領域・１は
+クイーンが置かれている状態
 
 
-# n = 8
-# problem = NQueenProblem(n)
-# problem.solve()
+〜処理の流れ〜
+solve_queenにn×nのnを渡す
+盤面：positionsを生成し全て-1に初期化
+外のfor文でボードの縦方向を走査する
+内のfor文でボードの横方向を走査する
+クイーンを置けるか調べる
+    →左から順に走査し、置く事ができるマス（-1）を見つける。
+    →その行で置けなかったら次の行へ
+クイーンを配置する
+?positionsの情報を更新（置けないマスを０に更新する処理）
+今いる行のfor文をスキップし、次の行のfor文の処理を行う
+上記を繰り返し、終了したら結果表示
 
-# print(len(problem.result))
-
-
-# def can_add(fwd, square):
-#     tx = square % 8
-#     ty = square // 8
-
-#     # 縦の確認
-#     if tx in fwd:
-#         return False
-#     # 横の確認
-#     if fwd[ty] != -1:
-#         return False
-#     # 斜めの確認
-#     if tx + ty in [fwd[i] + i for i in range(8) if fwd[i] != -1] \
-#             or tx - ty in [fwd[i] - i for i in range(8) if fwd[i] != -1]:
-#         return False
-#     return True
+"""
+import time
 
 
-# def solve(fwd, square):
+def prohibit(positions, n, col, row):
+    # queenを置いた列に配置を禁止する処理(0に変える)
+    for y in range(col + 1, n):  # col+1から始めることで、同じ列は変更しない(上書きを避ける)
+        positions[y][row] = 0
 
-#     if -1 not in fwd:
-#         return 1
+    # 右下にかけて
+    for i in range(1, min(n - col, n - row)):
+        positions[col + i][row + i] = 0
 
-#     ans = 0
-#     for i in range(square, 64):
-#         if can_add(fwd, i):
-#             ty = i // 8
-#             fwd[ty] = i % 8
-#             ans += solve(fwd, i + 1)
-#             fwd[ty] = -1
-
-#     return ans
+    # 左下にかけて
+    for i in range(1, min(n - col, row + 1)):
+        positions[col + i][row - i] = 0
 
 
-# def main():
-#     fwd = [-1 for _ in range(8)]
-#     print(solve(fwd, 0))
+def solve_queens(n):
+    # 処理の実行時間の計測・開始
+    start = time.time()
+    # 初期化：-1だったらクイーンを置く事ができる(リスト内包表記)
+    positions = [[-1] * n for _ in range(n)]
+
+    # 判定処理
+    for col in range(n):
+        for row in range(n):
+            if positions[col][row] == -1:
+                # queenを配置
+                positions[col][row] = 1
+                # 聞き筋のマスに置く事ができないようにする処理
+                prohibit(positions, n, col, row)
+                # 配置したので次の行の進む処理
+                break
+    # 処理の実行時間の計測・終了
+    end = time.time()
+    elapsed_time = end - start
+    print("n:", n)
+    print("処理時間:", elapsed_time, "秒")
+    # print(positions)
 
 
-# main()
+# n-queen問題を解く・1万が限界
+n = 8
+solve_queens(n)

@@ -1,39 +1,75 @@
-"""
-〜パラメータ〜
-n:ボードの一辺のマス
-x:横のマス
-y:縦のマス
-positions:n×nの二次元配列・-1はqueenが置けることを表す・０は他のクイーンの可動領域・１は
-クイーンが置かれている状態
+import time
 
 
-〜処理の流れ〜
-solve_queenにn×nのnを渡す
-盤面：positionsを生成し全て-1に初期化
-外のfor文でボードの縦方向を走査する
-内のfor文でボードの横方向を走査する
-クイーンを置けるか調べる
-    →左から順に走査し、置く事ができるマス（-1）を見つける。
-    →その行で置けなかったら次の行へ
-クイーンを配置する
-?positionsの情報を更新（置けないマスを０に更新する処理）
-今いる行のfor文をスキップし、次の行のfor文の処理を行う
-上記を繰り返し、終了したら結果表示
+# queenを置けるかどうかの判定をする関数
+def judgment(board, row, col, n):
+    # 同じ列をチェック
+    for i in range(row):
+        if board[i][col] == 1:
+            return False
 
-"""
+    # 左上方向をチェック
+    i = row
+    j = col
+    while i >= 0 and j >= 0:
+        if board[i][j] == 1:
+            return False
+        i -= 1
+        j -= 1
+
+    # 右上方向をチェック
+    i = row
+    j = col
+    while i >= 0 and j < n:
+        if board[i][j] == 1:
+            return False
+        i -= 1
+        j += 1
+
+    return True
+
+
+# queenを配置する処理
+def solve_queens_placement(board, row, n):
+    # n-queen問題を解く事ができたら
+    if row == n:
+        # 全てのクイーンが配置された場合は解を出力
+        print_board(board)
+        return True
+
+    for col in range(n):
+        if judgment(board, row, col, n):
+            board[row][col] = 1
+            if solve_queens_placement(board, row + 1, n):
+                return True
+            board[row][col] = 0
+
+    return False
 
 
 def solve_queens(n):
-    # 初期化：全てのクイーンは-1行にあると仮定する(リスト内包表記)
-    positions = [[-1] * n for i in range(n)]
+    # 処理の実行時間の計測・開始
+    start = time.time()
+    # 初期化
+    board = [[0] * n for _ in range(n)]
 
-    for y in range(n):
-        for x in range(n):
-            if positions[x][y] == -1:
-                positions[x][y] == 1
-                break
-            
+    # 第一引数に盤面の情報　第二引数に開始の行　第三引数に長さ
+    if not solve_queens_placement(board, 0, n):
+        print("解が存在しません")
+
+    # 処理の実行時間の計測・終了
+    end = time.time()
+    elapsed_time = end - start
+    print("n:", n)
+    print("処理時間:", elapsed_time, "秒")
+
+
+def print_board(board):
+    for row in board:
+        print(' '.join(str(cell) for cell in row))
+    print()
 
 
 # n-queen問題を解く
-solve_queens(8)
+n = 8
+solve_queens(n)
